@@ -14,7 +14,6 @@ const body = process.env.IDS.replace(/ /g, '').split(',').map(id => 'adID=' + id
 
 const urls = {
     prod: 'https://www.skelbiu.lt/index.php?mod=ajax&action=renewAd',
-    test: 'https://webhook.site/169b94df-4fb4-49f9-903f-1d839ff9eee0',
     localhost: 'http://localhost:3000',
 };
 
