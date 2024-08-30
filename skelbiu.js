@@ -20,6 +20,7 @@ require('dotenv').config();
   await page.type('#password-input', process.env.PASSWORD);
   await page.click('#submit-button');
   console.log('# Logging in...');
+  await page.screenshot({ path: screenshot.jpg});
   await page.waitForNavigation({ waitUntil: 'networkidle0' });
 
 
@@ -28,14 +29,12 @@ require('dotenv').config();
   console.log('# Logged in');
 
 
-  const updated = false;
-  const dataUpdated = await page.evaluate((id) => {
+  const [updated, dataUpdated] = await page.evaluate((id) => {
     const getDataUpdated = (selector) => document.querySelector(`a#renewID${id}${selector}`).getAttribute('data-updated');
     try {
-      return getDataUpdated('.renewLink');
+      return [false, getDataUpdated('.renewLink')];
     } catch (err) {
-      updated = true;
-      return getDataUpdated('.renewedAd');
+      return [true, getDataUpdated('.renewedAd')];
     }
   }, process.env.ID);
 
