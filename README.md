@@ -1,9 +1,7 @@
 # Skelbiu updater
 
-A simple js script which updates given adID's. 
-**skelbiu.js** uses puppeteer while as **skelbiu-ajax.js** uses node-fetch to send a post request.
-
-skelbiu-ajax.js is the one that works.
+A simple js script which updates given skelbiu adID's.
+**skelbiu-ajax.js** uses node-fetch to send a post request using user-given cookies. It's the one that works.
 
 ## Make a .env file and include the following:
 ```
