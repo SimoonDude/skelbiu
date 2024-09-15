@@ -10,7 +10,7 @@ const defaultRequestHeaders = {
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
 };
 
-const body = process.env.IDS.replace(/ /g, '').split(',').map(id => 'adID=' + id); // prepare the adID's
+const body = process.env.IDS.replace(/ /g, '').split(/\D|\s/).map(id => 'adID=' + id); console.log('Found IDs', body); // prepare the adID's
 
 const urls = {
     prod: 'https://www.skelbiu.lt/index.php?mod=ajax&action=renewAd',
@@ -18,14 +18,17 @@ const urls = {
 };
 
 const sendRequest = async () => {
-    body.forEach(id => { // for each ad send post request
+    body.forEach(id => { // for each adID send post request
         fetch(urls.prod, {
             method: "POST",
-            body: id,
+            body: id, // adID=...
             headers: { ...defaultRequestHeaders, ...requestHeaders },
         }).then(async (res) => {
-            console.log(`${id} renewed`);
-            console.log(`New rating: ${(await res.json()).placesHTML}`);
+            console.log(`Attempting ${id} renewal`);
+            try { console.info(`New rating: ${(await res.json()).placesHTML}`); }
+            catch (err) {
+                console.warn('You can update only once every 24 hrs')
+            }
         });
     });
 };
