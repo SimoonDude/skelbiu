@@ -1,6 +1,7 @@
 import fetch from "node-fetch";
 import 'dotenv/config';
 import _ from 'lodash';
+import log from './logger.js';
 
 const requestHeaders = await JSON.parse(process.env.COOKIES);
 
@@ -10,7 +11,8 @@ const defaultRequestHeaders = {
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
 };
 
-const body = process.env.IDS.replace(/ /g, '').split(/\D|\s/).map(id => 'adID=' + id); console.log('Found IDs', body); // prepare the adID's
+const body = process.env.IDS.replace(/ /g, '').split(/\D|\s/).map(id => 'adID=' + id); // prepare the adID's
+log(`Found IDs:${body}`);
 
 const urls = {
     prod: 'https://www.skelbiu.lt/index.php?mod=ajax&action=renewAd',
@@ -24,10 +26,10 @@ const sendRequest = async () => {
             body: id, // adID=...
             headers: { ...defaultRequestHeaders, ...requestHeaders },
         }).then(async (res) => {
-            console.log(`Attempting ${id} renewal`);
-            try { console.info(`New rating: ${(await res.json()).placesHTML}`); }
+            log(`Attempting ${id} renewal`);
+            try { log(`New rating: ${(await res.json()).placesHTML}`); }
             catch (err) {
-                console.warn('You can update only once every 24 hrs')
+                log('You can update only once every 24 hrs')
             }
         });
     });
